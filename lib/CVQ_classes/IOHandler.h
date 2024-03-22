@@ -19,8 +19,8 @@ class IOHandler
         const uint8_t IRQ                       = 0b01110010; // disable conversion start interrupt
         const uint8_t MUX                       = 0b00001100; // set MUX_VIN+ to CH0, MUX_VIN- to REFIN- (=GND)
 
-        uint8_t adcCalibrationConfig[7] = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW & (0x01 << 2)), CONFIG0, CONFIG1_CALIB, CONFIG2, CONFIG3_CALIB, IRQ, MUX};
-        uint8_t adcOperationConfig[7]   = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW & (0x01 << 2)), CONFIG0, CONFIG1_CONT, CONFIG2, CONFIG3_CONT, IRQ, MUX};
+        uint8_t adcCalibrationConfig[7] = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW | (0x01 << 2)), CONFIG0, CONFIG1_CALIB, CONFIG2, CONFIG3_CALIB, IRQ, MUX};
+        uint8_t adcOperationConfig[7]   = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW | (0x01 << 2)), CONFIG0, CONFIG1_CONT, CONFIG2, CONFIG3_CONT, IRQ, MUX};
 
         DAC dac;
         MCP346xR adc;

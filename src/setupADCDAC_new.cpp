@@ -11,7 +11,7 @@
 void performConversionISR();
 
 // Global variable to hold ACD-Value for ISR-Readout
-volatile uint16_t adcval = 0;
+volatile uint16_t inputVal = 0;
 
 // Create IOHandler
 IOHandler ioHandler(SPI_SPEED_20MHZ, MSBFIRST, SPI_MODE3, SPI0CS_PIN);
@@ -20,11 +20,11 @@ void setup(){
     
     // Pin setup //
 
-    // Light internal LED
+    // Set internal LED Pin internal LED
     pinMode(LED_BUILTIN, OUTPUT);
 
     // Setup GPIO22 for IRQ from ADC
-    pinMode(IRQ_INPUT_PIN, INPUT_PULLUP);
+    pinMode(IRQ_INPUT_PIN, INPUT);
 
     //Output Clock-Signal for ADC derived from internal clock to GPIO21
     clock_gpio_init(PICO_CLOCK_OUTPUT_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 10);
@@ -32,7 +32,7 @@ void setup(){
     // Set up Calibartion Push-Button Input Pin
     pinMode(PUSH_BUTTON_PIN, INPUT);
 
-    // Set up conversion mode switch Pin
+    // Set up conversion mode switch Pin (ToDo)
 
     // Initialize IO Handler
 
@@ -41,7 +41,6 @@ void setup(){
     ioHandler.writeADCOperationConfig();
 
     ioHandler.setDACRefExternal();
-    ioHandler.writeOutputVal(0);
 
     // perform calibration??
 
@@ -49,15 +48,22 @@ void setup(){
 
     attachInterrupt(digitalPinToInterrupt(IRQ_INPUT_PIN), performConversionISR, FALLING);
     ioHandler.startADCConversion();
+
+    digitalWrite(LED_BUILTIN, HIGH);
 };
 
 void loop(){
-
+// Test DAC function
+//   uint16_t x = 0;
+//   while(1){
+//     ioHandler.writeOutputVal(x);
+//     x += 50;
+//   }
 };
 
 
 void performConversionISR()
 {
-    uint16_t inputVal = ioHandler.readInputVal();
-    ioHandler.writeOutputVal(inputVal);   
-}
+    inputVal = ioHandler.readInputVal();
+    ioHandler.writeOutputVal(inputVal);
+};

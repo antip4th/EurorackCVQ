@@ -1,9 +1,9 @@
 #include "IOHandler.h"
 
-IOHandler::IOHandler(uint32_t spiSpeed, BitOrder spiBitOrder, SPIMode spiMode, uint8_t spiCSPin)
+IOHandler::IOHandler(uint32_t _spiSpeed, BitOrder _spiBitOrder, SPIMode _spiMode, uint8_t _spiCSPin)
 {
-    spiSettings = SPISettings(spiSpeed, spiBitOrder, spiMode);
-    spiCSPin = spiCSPin;
+    spiSettings = SPISettings(_spiSpeed, _spiBitOrder, _spiMode);
+    spiCSPin = _spiCSPin;
     dac = DAC(spiCSPin,255,255,255,255, &spiSettings);
     adc = MCP346xR(spiCSPin, &spiSettings);
 }
@@ -27,7 +27,7 @@ bool IOHandler::calibrateSystem()
 
 uint16_t IOHandler::readInputVal()
 {
-    return CONVERTERS_FULL_SCALE - adc.readValue() << 1; // Multiplied by factor 2, because of one unused resolution bit
+    return CONVERTERS_FULL_SCALE - (adc.readValue() << 1); // Multiplied by factor 2, because of one unused resolution bit
 }
 
 void IOHandler::resetADC()

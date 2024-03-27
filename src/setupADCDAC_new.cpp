@@ -29,12 +29,18 @@ void setup(){
     //Output Clock-Signal for ADC derived from internal clock to GPIO21
     clock_gpio_init(PICO_CLOCK_OUTPUT_PIN, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 10);
 
+    // Set up voltage range switch position (ToDo)
+
     // Set up Calibartion Push-Button Input Pin
     pinMode(PUSH_BUTTON_PIN, INPUT);
 
-    // Set up conversion mode switch Pin (ToDo)
+    // Set up conversion mode input Pin (ToDo)
 
-    // Initialize IO Handler
+    // Start up serial Port for debugging
+
+    Serial1.begin(115200);
+
+    // Initialize IO Handler //
 
     ioHandler.initSPI();
     ioHandler.resetADC();
@@ -59,6 +65,11 @@ void loop(){
 //     ioHandler.writeOutputVal(x);
 //     x += 50;
 //   }
+
+Serial1.print("Input: ");
+Serial1.println(inputVal, DEC);
+sleep_ms(100);
+
 };
 
 

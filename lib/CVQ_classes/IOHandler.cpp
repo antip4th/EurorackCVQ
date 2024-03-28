@@ -49,7 +49,7 @@ void IOHandler::writeADCRegister(uint8_t adcConfig[], uint8_t startAddr, uint8_t
 {
     // appending command-byte with starting addres to register values
     uint8_t message[len+1] = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW | (startAddr << 2))};
-    for (size_t i = 1; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         message[i+1] = adcConfig[i];
     }
@@ -63,7 +63,13 @@ void IOHandler::startADCConversion()
 
 void IOHandler::writeCalibration(uint16_t offsetCal, uint16_t gainCal)
 {
- 
+    uint8_t message[] = {static_cast<uint8_t>((offsetCal & 0xFF00)>>8),
+                         static_cast<uint8_t>((offsetCal & 0x00FF)),
+                         0x00,
+                         static_cast<uint8_t>((gainCal & 0xFF00)>>8),
+                         static_cast<uint8_t>((gainCal & 0x00FF)),
+                        };
+    writeADCRegister(message, 0x09, 5);
 }
 
 //DAC

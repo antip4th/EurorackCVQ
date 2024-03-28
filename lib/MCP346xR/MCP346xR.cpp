@@ -15,7 +15,7 @@ void MCP346xR::reset(){
 }
 
 void MCP346xR::writeConfig(uint8_t config[], uint8_t len){
-    // Continously writes config to ADC
+    // Continously writes bytes to SPI bus
     SPI.beginTransaction(*this->spiSettings);
     digitalWrite(SPICSPin, LOW);
     SPI.transfer(config,len);

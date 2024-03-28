@@ -45,6 +45,7 @@ void setup(){
     ioHandler.initSPI();
     ioHandler.resetADC();
     ioHandler.writeADCOperationConfig();
+    ioHandler.writeCalibration(OFFSETCAL, GAINCAL);
 
     ioHandler.setDACRefExternal();
 
@@ -66,9 +67,9 @@ void loop(){
 //     x += 50;
 //   }
 
-Serial1.print("Input: ");
-Serial1.println(inputVal, DEC);
-sleep_ms(100);
+// Serial1.print("Input: ");
+// Serial1.println(inputVal, DEC);
+// sleep_ms(100);
 
 };
 

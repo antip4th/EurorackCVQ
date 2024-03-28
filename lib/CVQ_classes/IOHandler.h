@@ -19,15 +19,15 @@ class IOHandler
         const uint8_t IRQ                       = 0b01110110; // disable conversion start interrupt, IRQ inactive state = logic high
         const uint8_t MUX                       = 0b00001100; // set MUX_VIN+ to CH0, MUX_VIN- to REFIN- (=GND)
 
-        uint8_t adcCalibrationConfig[7] = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW | (0x01 << 2)), CONFIG0, CONFIG1_CALIB, CONFIG2, CONFIG3_CALIB, IRQ, MUX};
-        uint8_t adcOperationConfig[7]   = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW | (0x01 << 2)), CONFIG0, CONFIG1_CONT, CONFIG2, CONFIG3_CONT, IRQ, MUX};
+        uint8_t adcCalibrationConfig[6] = {CONFIG0, CONFIG1_CALIB, CONFIG2, CONFIG3_CALIB, IRQ, MUX};
+        uint8_t adcOperationConfig[6]   = {CONFIG0, CONFIG1_CONT, CONFIG2, CONFIG3_CONT, IRQ, MUX};
 
         DAC dac;
         MCP346xR adc;
         SPISettings spiSettings;
         uint8_t spiCSPin;
         
-        void writeADCConfig(uint8_t adcConfig[], uint8_t startAddr, uint8_t len);
+        void writeADCRegister(uint8_t adcConfig[], uint8_t startAddr, uint8_t len);
     
     public:
         // Constructor
@@ -41,6 +41,7 @@ class IOHandler
         void writeADCOperationConfig();
         void writeADCCalibrationConfig();
         void startADCConversion();
+        void writeCalibration(uint16_t offsetCal, uint16_t gainCal);
         uint16_t readInputVal();
         
         // DAC

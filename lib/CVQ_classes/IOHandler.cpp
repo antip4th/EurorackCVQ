@@ -37,22 +37,33 @@ void IOHandler::resetADC()
 
 void IOHandler::writeADCOperationConfig()
 {
-    adc.writeConfig(adcOperationConfig, 7);
+    writeADCRegister(adcOperationConfig, 0x01, 6);
 }
 
 void IOHandler::writeADCCalibrationConfig()
 {
-    adc.writeConfig(adcCalibrationConfig, 7);
+    writeADCRegister(adcCalibrationConfig, 0x01, 6);
 }
 
-void IOHandler::writeADCConfig(uint8_t adcConfig[], uint8_t startAddr, uint8_t len)
+void IOHandler::writeADCRegister(uint8_t adcConfig[], uint8_t startAddr, uint8_t len)
 {
-    adc.writeConfig(adcConfig, len); // To changed to start writing at a specific address
+    // appending command-byte with starting addres to register values
+    uint8_t message[len+1] = {static_cast<uint8_t>(COMMAND_BYTE_WRITE_RAW | (startAddr << 2))};
+    for (size_t i = 1; i < len; i++)
+    {
+        message[i+1] = adcConfig[i];
+    }
+    adc.writeConfig(message, len+1);
 }
 
 void IOHandler::startADCConversion()
 {
     adc.startConversion();
+}
+
+void IOHandler::writeCalibration(uint16_t offsetCal, uint16_t gainCal)
+{
+ 
 }
 
 //DAC

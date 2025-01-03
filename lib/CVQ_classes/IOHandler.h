@@ -45,6 +45,7 @@ class IOHandler
         void writeADCOperationConfig();
         void writeADCCalibrationConfig();
         void startADCConversion();
+        void adcStandby();
         void writeCalibration(uint16_t offsetCal, uint16_t gainCal);
         uint16_t readInputVal();
         

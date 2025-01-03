@@ -12,6 +12,7 @@ class MCP346xR{
         void writeConfig(uint8_t config[], uint8_t len);
         void writeOffsetCorrection(uint16_t offsetCorrectionVal);
         void startConversion();
+        void standby();
         uint8_t getStatus();
         uint16_t readValue();
         bool getDataReady();

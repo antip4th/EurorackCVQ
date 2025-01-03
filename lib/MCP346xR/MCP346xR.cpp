@@ -40,6 +40,15 @@ void MCP346xR::startConversion(){
     SPI.endTransaction();
 };
 
+void MCP346xR::standby(){
+    // Puts the MCP3461 into standby mode using 1011 fast-command
+    SPI.beginTransaction(*this->spiSettings);
+    digitalWrite(SPICSPin, LOW);
+    SPI.transfer(0b01101100);
+    digitalWrite(SPICSPin, HIGH);
+    SPI.endTransaction();
+};
+
 uint8_t MCP346xR::getStatus(){
     SPI.beginTransaction(*this->spiSettings);
     digitalWrite(SPICSPin, LOW);

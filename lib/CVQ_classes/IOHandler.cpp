@@ -29,7 +29,7 @@ uint16_t IOHandler::readInputVal()
 {
     // Multiplied by factor 2, because of one unused resolution bit
     uint16_t inval = CONVERTERS_FULL_SCALE - (adc.readValue() << 1); 
-    return static_cast<uint16_t>(inval/INPUT_GAIN_CORRECTION_FACTOR - INPUT_OFFSET_ERROR);
+    return static_cast<uint16_t>(inval * INPUT_GAIN_CORRECTION_FACTOR + INPUT_OFFSET_CORRECTION);
 }
 
 void IOHandler::resetADC()
@@ -93,7 +93,7 @@ void IOHandler::setDACRefExternal()
 
 void IOHandler::writeOutputVal(uint16_t outputVal)
 {
-    uint16_t calibVal = static_cast<uint16_t>(outputVal/OUTPUT_GAIN_CORRECTION_FACTOR - OUTPUT_OFFSET_ERROR);
+    uint16_t calibVal = static_cast<uint16_t>(outputVal * OUTPUT_GAIN_CORRECTION_FACTOR + OUTPUT_OFFSET_CORRECTION);
     uint16_t outval = (CONVERTERS_FULL_SCALE - calibVal);
     dac.writeChannel(DAC_CHANNEL_A, outval);
 }

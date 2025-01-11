@@ -1,15 +1,15 @@
 %% Two Point Calibration
 % Calculates the correction values out of two measurements per converter.
 
-% table of common corrensponding calibration values
-%
 % mV      | LSB
 % -----------------
 % 1000    | 6554
+% 2000    | 13107
 % 3000    | 19661
 % 5000    | 32768
 % 7000    | 45875
-% 9000    | 58982
+% 8000    | 52429
+% 9000    | 58982	
 
 Vpp = 10;
 
@@ -32,10 +32,12 @@ fprintf("Output: C_g = %f, C_o = %.f\n", CgOut, CoOut);
 
 % check values: calculate remaining error in LSB
 
-(calibMeasInputInteger(1)/CgIn) - CoIn - calibInputIntNominal(1)
-(calibMeasOutputInteger(1)/CgOut) - CoOut - calibOutputIntNominal(1)
+calibMeasInputInteger(1)*CgIn + CoIn - calibInputIntNominal(1)
+calibMeasInputInteger(2)*CgIn + CoIn - calibInputIntNominal(2)
+calibMeasOutputInteger(1)*CgOut + CoOut - calibOutputIntNominal(1)
+calibMeasOutputInteger(2)*CgOut + CoOut - calibOutputIntNominal(2)
 
-function [Cg, Co] = calcCalibVals(measuredVal1, measuredVal2, nominalVal1, nominalVal2)
-    Cg = (measuredVal2-measuredVal1)/(nominalVal2-nominalVal1);
-    Co = round((measuredVal1*nominalVal2 - measuredVal2*nominalVal1)/(measuredVal2-measuredVal1));
+function [Cg, Co] = calcCalibVals(v_r1, v_r2, v_c1, v_c2)
+    Cg = (v_c2-v_c1)/(v_r2-v_r1);
+    Co = round((v_r2*v_c1 - v_r1*v_c2)/(v_r2-v_r1));
 end

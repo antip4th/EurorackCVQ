@@ -65,13 +65,15 @@ void setup()
     // mV      | LSB
     // -----------------
     // 1000    | 6554
+    // 2000    | 13107
     // 3000    | 19661
     // 5000    | 32768
     // 7000    | 45875
+    // 8000    | 52429
     // 9000    | 58982	
 
-    uint16_t calibIntValues[NUM_CALIB_MEAS] = {6554, 58982};
-    float calibVoltValues[NUM_CALIB_MEAS]   = {1000.0, 9000.0};
+    uint16_t calibIntValues[NUM_CALIB_MEAS] = {13107, 52429};
+    float calibVoltValues[NUM_CALIB_MEAS]   = {2000.0, 8000.0};
     
     if(!digitalRead(PUSH_BUTTON_PIN))
     {
@@ -111,16 +113,23 @@ void setup()
         }
 
         Serial1.println("Input Measurements done");
+        
         // blink fast to signal end of input measurements
         blinkInternalLED(10,0,50);
-
+        // print values to console again after button press
+        waitForPinAction(PUSH_BUTTON_PIN, FALLING, 50);
+        for(int i = 0; i < NUM_CALIB_MEAS; i++)
+        {
+            Serial1.printf("Average %d = %d\n", i, measAvg[i]);
+        }
+        
         // disable ADC clocking for better measurement
         pinMode(PICO_CLOCK_OUTPUT_PIN, INPUT_PULLDOWN);
 
         // write output values to 
         for(int i = 0; i<NUM_CALIB_MEAS; i++)
         {
-            blinkInternalLED(i,0);
+            blinkInternalLED(i+1,0);
             Serial1.printf("%d/%d: Setting Output to %d\n", i+1, NUM_CALIB_MEAS, calibIntValues[i]);
             ioHandler.writeOutputVal(calibIntValues[i]);
             Serial1.println("Press button for next value.");
